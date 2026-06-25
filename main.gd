@@ -46,5 +46,19 @@ func _ready() -> void:
 	print("  frightened after end of turn → %d  (expect 1)" % cond.value_of(Ids.Condition.FRIGHTENED))
 	assert(cond.value_of(Ids.Condition.FRIGHTENED) == 1, "frightened decrement smoke check failed")
 
+	# Strike: a +9 longsword (1d8+4 slashing) at an off-guard goblin (AC 16 → 14).
+	var hero := Creature.new("Hero", 18, 30)
+	var goblin := Creature.new("Goblin", 16, 24)
+	goblin.conditions.apply(Ids.Condition.OFF_GUARD, 0, &"flanked")
+	assert(goblin.effective_ac() == 14, "off-guard AC smoke check failed")
+	var economy := ActionEconomy.new()
+	var strike := Strike.new(WeaponProfile.melee(9, "1d8", 4, Ids.DAMAGE_SLASHING))
+	var sr := strike.resolve(hero, goblin, economy, rng)
+	print("  %s" % sr)
+	print("  goblin %d/%d HP · actions left %d · next MAP %d" % [
+		goblin.hp, goblin.max_hp, economy.actions_remaining, economy.map_penalty(false)])
+	assert(sr.performed and economy.actions_remaining == 2, "strike action-economy smoke check failed")
+	assert(economy.map_penalty(false) == -5, "MAP smoke check failed")
+
 	print("── smoke test OK ──")
 	get_tree().quit(0)

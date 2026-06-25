@@ -12,8 +12,8 @@ build order.
 
 ## Status
 
-Phase 1 headless rules core — milestones 1–3 and 5 done (M4 deferred), verified
-with GUT:
+Phase 1 headless rules core — milestones 1–3, 5, and 6 done (M4 deferred),
+verified with GUT:
 
 - **M1 — Scaffold:** project, folder tree, `core/ids.gd` central id registry,
   resource schema stubs (`resources/*.gd`), GUT installed, console smoke harness.
@@ -29,6 +29,13 @@ with GUT:
   imposes — emitted as `Modifier`s filtered by a stat-tag context, so they
   resolve through the M3 stack and interact correctly (a status and a
   circumstance penalty both apply; two status penalties take the worst).
+- **M6 — Action economy + Strike:** `core/actions/`. 3 actions + reaction per
+  turn, the Multiple Attack Penalty (−5/−10, −4/−8 agile), and a full Strike:
+  attack through the universal check, hit/crit by degree, crit-doubled damage,
+  then the target's immunity/weakness/resistance. Consumes M5 conditions —
+  off-guard lowers the target's AC; frightened/enfeebled/clumsy bite the attack.
+  Introduces a lean runtime `core/creature/creature.gd` (the stat block M4 will
+  add derivation to).
 
 Everything is deterministic (rolls run against an **injected** `RandomNumberGenerator`
 — the core never calls global `randi()`).
@@ -58,6 +65,6 @@ godot --headless
 godot --headless -s addons/gut/gut_cmdln.gd -gdir=res://tests -ginclude_subdirs -gexit
 ```
 
-Current suite: **67 tests / 984 assertions, all passing.**
+Current suite: **95 tests / 1341 assertions, all passing.**
 A rule isn't "done" until it has tests — every new core feature ships with a GUT
 suite before the next milestone begins.
