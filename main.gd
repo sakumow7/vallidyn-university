@@ -60,6 +60,17 @@ func _ready() -> void:
 	assert(sr.performed and economy.actions_remaining == 2, "strike action-economy smoke check failed")
 	assert(economy.map_penalty(false) == -5, "MAP smoke check failed")
 
+	# Derived defenses (M4): AC computed from Dex (capped), proficiency, and armor.
+	var fighter := Creature.new("Fighter")
+	fighter.level = 5
+	fighter.ability_scores.set_score(Ids.Ability.DEX, 14)   # +2, capped to 1
+	fighter.proficiencies = {&"ac": Ids.ProficiencyRank.EXPERT}
+	fighter.dex_cap = 1
+	fighter.armor_item_bonus = 4
+	fighter.derive_defenses()
+	print("  derived fighter AC = %d  (expect 24)" % fighter.ac)
+	assert(fighter.ac == 24, "derived AC smoke check failed")
+
 	# Grid + flanking (M7): two allies on opposite sides flank the target → off-guard.
 	var west := Vector2i(0, 1)
 	var foe_sq := Vector2i(1, 1)

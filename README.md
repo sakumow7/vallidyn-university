@@ -12,8 +12,7 @@ build order.
 
 ## Status
 
-Phase 1 headless rules core — milestones 1–3 and 5–7 done (M4 deferred),
-verified with GUT:
+Phase 1 headless rules core — milestones 1–7 done, verified with GUT:
 
 - **M1 — Scaffold:** project, folder tree, `core/ids.gd` central id registry,
   resource schema stubs (`resources/*.gd`), GUT installed, console smoke harness.
@@ -23,6 +22,10 @@ verified with GUT:
 - **M3 — Modifier stack:** `core/modifiers/`. PF2e stacking — typed
   circumstance/status/item/difficulty bonuses take-highest, penalties
   take-worst, untyped stacks.
+- **M4 — Defenses:** `core/creature/`. Ability scores → modifiers, proficiency
+  (level + rank, untrained adds nothing), and derived AC / Fort-Ref-Will /
+  Perception / DCs / HP — computed, never authored. Conditions fold into saves
+  and Perception (frightened drops all; clumsy hits Reflex, not Will).
 - **M5 — Conditions engine:** `core/conditions/`. Full Remastered list (~40),
   valued + binary, with take-highest stacking, implications (grabbed → off-guard
   + immobilized), end-of-turn decrement/expiry, and the modifiers each condition
@@ -34,8 +37,8 @@ verified with GUT:
   attack through the universal check, hit/crit by degree, crit-doubled damage,
   then the target's immunity/weakness/resistance. Consumes M5 conditions —
   off-guard lowers the target's AC; frightened/enfeebled/clumsy bite the attack.
-  Introduces a lean runtime `core/creature/creature.gd` (the stat block M4 will
-  add derivation to).
+  Introduces the runtime `core/creature/creature.gd` stat block (its derivation
+  is M4).
 - **M7 — Grid + movement + LoS:** `core/encounter/`. Square grid with the
   5/10/5/10 diagonal distance rule; reach and flanking geometry (flanking →
   off-guard, feeding M6); difficult-terrain (×2) path cost and a Dijkstra
@@ -70,6 +73,6 @@ godot --headless
 godot --headless -s addons/gut/gut_cmdln.gd -gdir=res://tests -ginclude_subdirs -gexit
 ```
 
-Current suite: **126 tests / 1392 assertions, all passing.**
+Current suite: **148 tests / 1436 assertions, all passing.**
 A rule isn't "done" until it has tests — every new core feature ships with a GUT
 suite before the next milestone begins.

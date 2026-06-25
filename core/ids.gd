@@ -50,14 +50,14 @@ const ABILITY_NAMES := {
 # Proficiency bonus = level + rank bonus, but ONLY when trained or better.
 # Untrained contributes 0 and does NOT add level (enforced in proficiency.gd, M4).
 # ─────────────────────────────────────────────────────────────────────────────
-enum Proficiency { UNTRAINED, TRAINED, EXPERT, MASTER, LEGENDARY }
+enum ProficiencyRank { UNTRAINED, TRAINED, EXPERT, MASTER, LEGENDARY }
 
 const PROFICIENCY_BONUS := {
-	Proficiency.UNTRAINED: 0,
-	Proficiency.TRAINED: 2,
-	Proficiency.EXPERT: 4,
-	Proficiency.MASTER: 6,
-	Proficiency.LEGENDARY: 8,
+	ProficiencyRank.UNTRAINED: 0,
+	ProficiencyRank.TRAINED: 2,
+	ProficiencyRank.EXPERT: 4,
+	ProficiencyRank.MASTER: 6,
+	ProficiencyRank.LEGENDARY: 8,
 }
 
 
@@ -206,7 +206,7 @@ static func degree_name(d: Degree) -> String:
 	return DEGREE_NAMES.get(d, "Unknown")
 
 ## Rank bonus for a proficiency rank (the +2/+4/+6/+8 part, sans level).
-static func proficiency_bonus(rank: Proficiency) -> int:
+static func proficiency_bonus(rank: ProficiencyRank) -> int:
 	return PROFICIENCY_BONUS.get(rank, 0)
 
 ## True for modifier types whose same-type instances DON'T stack (take
