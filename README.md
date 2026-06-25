@@ -12,7 +12,8 @@ build order.
 
 ## Status
 
-Phase 1, milestones 1–3 complete (headless rules core, verified with GUT):
+Phase 1 headless rules core — milestones 1–3 and 5 done (M4 deferred), verified
+with GUT:
 
 - **M1 — Scaffold:** project, folder tree, `core/ids.gd` central id registry,
   resource schema stubs (`resources/*.gd`), GUT installed, console smoke harness.
@@ -22,6 +23,12 @@ Phase 1, milestones 1–3 complete (headless rules core, verified with GUT):
 - **M3 — Modifier stack:** `core/modifiers/`. PF2e stacking — typed
   circumstance/status/item/difficulty bonuses take-highest, penalties
   take-worst, untyped stacks.
+- **M5 — Conditions engine:** `core/conditions/`. Full Remastered list (~40),
+  valued + binary, with take-highest stacking, implications (grabbed → off-guard
+  + immobilized), end-of-turn decrement/expiry, and the modifiers each condition
+  imposes — emitted as `Modifier`s filtered by a stat-tag context, so they
+  resolve through the M3 stack and interact correctly (a status and a
+  circumstance penalty both apply; two status penalties take the worst).
 
 Everything is deterministic (rolls run against an **injected** `RandomNumberGenerator`
 — the core never calls global `randi()`).
@@ -51,6 +58,6 @@ godot --headless
 godot --headless -s addons/gut/gut_cmdln.gd -gdir=res://tests -ginclude_subdirs -gexit
 ```
 
-Current suite: **40 tests / 919 assertions, all passing.**
+Current suite: **67 tests / 984 assertions, all passing.**
 A rule isn't "done" until it has tests — every new core feature ships with a GUT
 suite before the next milestone begins.

@@ -104,6 +104,52 @@ enum Save { FORTITUDE, REFLEX, WILL }
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# Conditions (spec §4.4) — the full Remastered list (~40). A CLOSED rules set, so
+# it's an enum (the identity). Mechanics — valued?, implications, decrement,
+# emitted modifiers — live in ConditionEngine. Slugs/names derive from the enum
+# keys, so this stays the single source of truth and maps cleanly to Foundry slugs.
+# Valued conditions: clumsy, doomed, drained, dying, enfeebled, frightened,
+# sickened, slowed, stunned, stupefied, wounded. The rest are binary.
+# ─────────────────────────────────────────────────────────────────────────────
+enum Condition {
+	# Senses & detection
+	OBSERVED, CONCEALED, HIDDEN, UNDETECTED, UNNOTICED, INVISIBLE,
+	BLINDED, DAZZLED, DEAFENED,
+	# Fear & mind
+	FRIGHTENED, FASCINATED, FLEEING, CONFUSED, CONTROLLED, STUPEFIED,
+	# Attitudes (social)
+	HELPFUL, FRIENDLY, INDIFFERENT, UNFRIENDLY, HOSTILE,
+	# Ability debilitations
+	CLUMSY, ENFEEBLED, DRAINED, SICKENED,
+	# Health & death spiral
+	DYING, WOUNDED, DOOMED, UNCONSCIOUS, FATIGUED,
+	# Restriction & movement
+	OFF_GUARD, PRONE, GRABBED, RESTRAINED, IMMOBILIZED, PARALYZED, PETRIFIED,
+	ENCUMBERED,
+	# Action economy
+	SLOWED, STUNNED, QUICKENED,
+}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Stat tags (spec §4.4) — the vocabulary a roll/statistic carries so the engine
+# knows which conditional modifiers apply. A check/defense context is a set of
+# these (e.g. a Reflex save = {SAVE, REFLEX, DEX_BASED}; AC = {AC, DEX_BASED};
+# Perception = {PERCEPTION, WIS_BASED}). Conditions declare which tags they hit
+# (clumsy → DEX_BASED, enfeebled → STR_BASED, frightened → all). When M4/M6 build
+# defenses and the full check pipeline, they tag their contexts with these.
+# ─────────────────────────────────────────────────────────────────────────────
+enum StatTag {
+	AC,
+	PERCEPTION,
+	SAVE, FORTITUDE, REFLEX, WILL,
+	ATTACK, MELEE, RANGED, SPELL_ATTACK,
+	SPELL_DC, CLASS_DC, SKILL, INITIATIVE,
+	STR_BASED, DEX_BASED, CON_BASED, INT_BASED, WIS_BASED, CHA_BASED,
+}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Open, data-driven id sets. Starter values only — extended by the importer
 # (spec §10). Engine code references these consts; data files reuse the strings.
 # ─────────────────────────────────────────────────────────────────────────────
@@ -129,13 +175,7 @@ const PHYSICAL_DAMAGE_TYPES: Array[StringName] = [
 	DAMAGE_BLUDGEONING, DAMAGE_PIERCING, DAMAGE_SLASHING,
 ]
 
-# A few conditions referenced early (the full ~40 land in condition_engine.gd, M5).
-const CONDITION_OFF_GUARD := &"off-guard"
-const CONDITION_FRIGHTENED := &"frightened"
-const CONDITION_PRONE := &"prone"
-const CONDITION_CLUMSY := &"clumsy"
-const CONDITION_DRAINED := &"drained"
-const CONDITION_ENFEEBLED := &"enfeebled"
+# Conditions now live in the Condition enum above (closed rules set, §4.4).
 
 # A few traits referenced by mechanics (e.g. agile changes MAP). Extended on import.
 const TRAIT_AGILE := &"agile"

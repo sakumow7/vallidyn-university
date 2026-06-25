@@ -33,5 +33,18 @@ func _ready() -> void:
 	print("  damage 2d6+4 → %d  (faces %s)" % [dmg.total, str(dmg.faces)])
 	assert(dmg.valid and dmg.faces.size() == 2, "dice smoke check failed")
 
+	# Conditions: frightened 2 (−2 status to everything) + off-guard (−2 circ AC).
+	# Against this creature's AC the two penalties are different types, so both apply.
+	var cond := ConditionEngine.new()
+	cond.apply(Ids.Condition.FRIGHTENED, 2, &"Demoralize")
+	cond.apply(Ids.Condition.OFF_GUARD, 0, &"flanked")
+	var ac_stack := ModifierStack.new()
+	ac_stack.add_all(cond.modifiers_for([Ids.StatTag.AC, Ids.StatTag.DEX_BASED]))
+	print("  AC under frightened 2 + off-guard → %+d  (expect -4)" % ac_stack.total())
+	assert(ac_stack.total() == -4, "condition modifier emission smoke check failed")
+	cond.tick_end_of_turn()
+	print("  frightened after end of turn → %d  (expect 1)" % cond.value_of(Ids.Condition.FRIGHTENED))
+	assert(cond.value_of(Ids.Condition.FRIGHTENED) == 1, "frightened decrement smoke check failed")
+
 	print("── smoke test OK ──")
 	get_tree().quit(0)
