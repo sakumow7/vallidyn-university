@@ -12,7 +12,7 @@ build order.
 
 ## Status
 
-Phase 1 headless rules core — milestones 1–3, 5, and 6 done (M4 deferred),
+Phase 1 headless rules core — milestones 1–3 and 5–7 done (M4 deferred),
 verified with GUT:
 
 - **M1 — Scaffold:** project, folder tree, `core/ids.gd` central id registry,
@@ -36,6 +36,11 @@ verified with GUT:
   off-guard lowers the target's AC; frightened/enfeebled/clumsy bite the attack.
   Introduces a lean runtime `core/creature/creature.gd` (the stat block M4 will
   add derivation to).
+- **M7 — Grid + movement + LoS:** `core/encounter/`. Square grid with the
+  5/10/5/10 diagonal distance rule; reach and flanking geometry (flanking →
+  off-guard, feeding M6); difficult-terrain (×2) path cost and a Dijkstra
+  reachable set that stays correct under the alternating diagonal rule; and
+  line-of-sight / cover (none/lesser/standard/greater → AC bonus).
 
 Everything is deterministic (rolls run against an **injected** `RandomNumberGenerator`
 — the core never calls global `randi()`).
@@ -65,6 +70,6 @@ godot --headless
 godot --headless -s addons/gut/gut_cmdln.gd -gdir=res://tests -ginclude_subdirs -gexit
 ```
 
-Current suite: **95 tests / 1341 assertions, all passing.**
+Current suite: **126 tests / 1392 assertions, all passing.**
 A rule isn't "done" until it has tests — every new core feature ships with a GUT
 suite before the next milestone begins.

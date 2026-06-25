@@ -60,5 +60,13 @@ func _ready() -> void:
 	assert(sr.performed and economy.actions_remaining == 2, "strike action-economy smoke check failed")
 	assert(economy.map_penalty(false) == -5, "MAP smoke check failed")
 
+	# Grid + flanking (M7): two allies on opposite sides flank the target → off-guard.
+	var west := Vector2i(0, 1)
+	var foe_sq := Vector2i(1, 1)
+	var east := Vector2i(2, 1)
+	var flanked := Movement.is_flanked(foe_sq, [west, east])
+	print("  allies %d ft apart, target between → flanked: %s" % [Grid.distance(west, east), str(flanked)])
+	assert(Grid.distance(west, east) == 10 and flanked, "flanking smoke check failed")
+
 	print("── smoke test OK ──")
 	get_tree().quit(0)

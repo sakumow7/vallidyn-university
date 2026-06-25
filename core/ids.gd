@@ -150,6 +150,20 @@ enum StatTag {
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# Cover (spec §4.6) — a circumstance bonus to the DEFENDER's AC (and Reflex /
+# Stealth). Computed per attacker→target line by line_of_sight.gd.
+# ─────────────────────────────────────────────────────────────────────────────
+enum Cover { NONE, LESSER, STANDARD, GREATER }
+
+const COVER_AC_BONUS := {
+	Cover.NONE: 0,
+	Cover.LESSER: 1,
+	Cover.STANDARD: 2,
+	Cover.GREATER: 4,
+}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Open, data-driven id sets. Starter values only — extended by the importer
 # (spec §10). Engine code references these consts; data files reuse the strings.
 # ─────────────────────────────────────────────────────────────────────────────
@@ -199,3 +213,7 @@ static func proficiency_bonus(rank: Proficiency) -> int:
 ## highest bonus / worst penalty). UNTYPED is the only stacking type.
 static func modifier_type_stacks(type: ModifierType) -> bool:
 	return type == ModifierType.UNTYPED
+
+## Circumstance bonus to AC granted by a cover level.
+static func cover_ac_bonus(cover: Cover) -> int:
+	return COVER_AC_BONUS.get(cover, 0)
